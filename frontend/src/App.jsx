@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import Message from "./components/Message";
 
 function App() {
+  
   const [username, setusername] = useState("");
   const [submitted, setsubmitted] = useState();
   const [messages, setMessages] = useState([]);
-  const [usermess, setusermess] = useState();
+  const [usermess, setusermess] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,12 +16,12 @@ function App() {
 
   const handleusermess = (e) => {
     e.preventDefault();
-
     setMessages((prev) => [
       ...prev,
       {
         mess: usermess,
         sender: "me",
+        name : username
       },
     ]);
 
@@ -30,7 +31,7 @@ function App() {
   return (
     <>
       <div className="flex justify-center items-center bg-black text-white w-screen h-screen">
-        {/* {!submitted && (
+        {!submitted ? (
           <div className="w-fit h-2xl bg-blue-400 p-2 rounded-xl">
             <h2 className="p-4 text-black text-2xl font-bold">
               enter your name ...
@@ -50,16 +51,21 @@ function App() {
               Submit
             </button>
           </div> 
-        )} */}
+        ) : ( 
         <div className="bg-black flex justify-center flex-col items-center text-white">
-          <div className="flex p-2 gap-2">
+          <div className="flex p-2 gap-8 justify-center items-center">
             <h1 className="text-blue-500">group chat...</h1>
-            <div className="flex">member</div>
+            <div className="flex text-xl p-2">sgined in as 
+              <div className="font-bold pl-2">
+              {username}</div>
+              </div>
           </div>
           <div className="flex bg-white flex-col gap-3 rounded-2xl   h-[calc(100vh-150px)] overflow-y-auto text-black w-4xl p-4">
+            
             {messages.map((mess, index) => (
-              <Message key={index} mess={mess.mess} sender={mess.sender} />
+              <Message key={index} mess={mess.mess} sender={mess.sender} name={mess.name} />
             ))}
+
           </div>
 
           {/* input and send */}
@@ -80,7 +86,8 @@ function App() {
               Send
             </button>
           </div>
-        </div>
+        </div>)}
+       
       </div>
     </>
   );
