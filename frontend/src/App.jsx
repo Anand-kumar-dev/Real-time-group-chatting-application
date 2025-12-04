@@ -1,13 +1,32 @@
 import { useEffect, useState } from "react";
 import Message from "./components/Message";
+import { socket } from "./socket";
+import { connect } from "socket.io-client";
 
 function App() {
-  
   const [username, setusername] = useState("");
   const [submitted, setsubmitted] = useState();
   const [messages, setMessages] = useState([]);
   const [usermess, setusermess] = useState("");
 
+  useEffect(() => {
+    socket.on("connect", (socket) => {
+      console.log(`connected id :${socket}`);
+    });
+
+    socket.on("message", (data) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          mess: data.mess,
+          sender: "other",
+          name: data.name,
+        },
+      ]);
+    });
+  }, []);
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(username);
@@ -21,9 +40,15 @@ function App() {
       {
         mess: usermess,
         sender: "me",
-        name : username
+        name: username,
       },
     ]);
+    
+    socket.emit("message", {
+      name: username,
+      mess: usermess,
+      sender: "other",
+    });
 
     setusermess("");
   };
@@ -50,44 +75,47 @@ function App() {
             >
               Submit
             </button>
-          </div> 
-        ) : ( 
-        <div className="bg-black flex justify-center flex-col items-center text-white">
-          <div className="flex p-2 gap-8 justify-center items-center">
-            <h1 className="text-blue-500">group chat...</h1>
-            <div className="flex text-xl p-2">sgined in as 
-              <div className="font-bold pl-2">
-              {username}</div>
+          </div>
+        ) : (
+          <div className="bg-black flex justify-center flex-col items-center text-white">
+            <div className="flex p-2 gap-8 justify-center items-center">
+              <h1 className="text-blue-500">group chat...</h1>
+              <div className="flex text-xl p-2">
+                sgined in as
+                <div className="font-bold pl-2">{username}</div>
               </div>
-          </div>
-          <div className="flex bg-white flex-col gap-3 rounded-2xl   h-[calc(100vh-150px)] overflow-y-auto text-black w-4xl p-4">
-            
-            {messages.map((mess, index) => (
-              <Message key={index} mess={mess.mess} sender={mess.sender} name={mess.name} />
-            ))}
+            </div>
+            <div className="flex bg-white flex-col gap-3 rounded-2xl   h-[calc(100vh-150px)] overflow-y-auto text-black w-4xl p-4">
+              {messages.map((mess, index) => (
+                <Message
+                  key={index}
+                  mess={mess.mess}
+                  sender={mess.sender}
+                  name={mess.name}
+                />
+              ))}
+            </div>
 
-          </div>
+            {/* input and send */}
 
-          {/* input and send */}
-
-          <div className="flex gap-2 w-full mt-4 items-center">
-            <input
-              onChange={(e) => {
-                setusermess(e.target.value);
-              }}
-              value={usermess}
-              className="flex-1 p-2 rounded-xl bg-white text-black text-xl"
-              type="text"
-            />
-            <button
-              onClick={handleusermess}
-              className="bg-blue-600 px-4 py-2 rounded-xl text-white"
-            >
-              Send
-            </button>
+            <div className="flex gap-2 w-full mt-4 items-center">
+              <input
+                onChange={(e) => {
+                  setusermess(e.target.value);
+                }}
+                value={usermess}
+                className="flex-1 p-2 rounded-xl bg-white text-black text-xl"
+                type="text"
+              />
+              <button
+                onClick={handleusermess}
+                className="bg-blue-600 px-4 py-2 rounded-xl text-white"
+              >
+                Send
+              </button>
+            </div>
           </div>
-        </div>)}
-       
+        )}
       </div>
     </>
   );

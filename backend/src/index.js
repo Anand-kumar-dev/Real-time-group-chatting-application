@@ -1,23 +1,31 @@
-import { Hono } from 'hono'
-import { createServer } from 'node:http'
-import { Server } from 'socket.io'
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+import { Server } from "socket.io";
 
-const app = new Hono()
+const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text("hi there")
-})
+const httpServer = serve({
+    fetch: app.fetch,
+    port: 3000,
+});
 
-const httpServer = createServer((req, res) => app.fetch(req, res))
+app.get('/', (c) => c.text('Hono!'))
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*"
-  }
-})
-
+const io = new Server(httpServer,{
+  cors:"*"
+}
+);
 
 
-httpServer.listen(3000, "0.0.0.0",() => {
-  console.log(` Server running at http://localhost:3000`)
-})
+
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("message", (msg) => {
+    console.log("Message from client:", msg);
+    socket.broadcast.emit("message", msg);
+  });
+
+  
+});
