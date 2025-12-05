@@ -7,20 +7,22 @@ A modern, real-time group chat application built with **React**, **Node.js**, an
 ## Project Screenshots & Videos
 
 ### Screenshots
-<!-- Add your project screenshots here -->
+<img width="1366" height="642" alt="Screenshot 2025-12-05 134949" src="https://github.com/user-attachments/assets/1cd69f26-4c73-40ec-a595-a45b63e3ae84" />
+
+<img width="1366" height="636" alt="Screenshot 2025-12-05 134925" src="https://github.com/user-attachments/assets/4dacc897-8d88-48f4-bc02-fb93ca3e3d10" />
+
+<img width="1366" height="640" alt="Screenshot 2025-12-05 135740" src="https://github.com/user-attachments/assets/538f88f0-85a6-452f-82f9-f296a9ce06dc" />
+
+
+
 ```
 [Screenshot 1 - Login Screen]
-c:\Users\aa\Pictures\Screenshots\Screenshot 2025-12-05 134949.png
 [Screenshot 2 - Chat Interface]
-c:\Users\aa\Pictures\Screenshots\Screenshot 2025-12-05 134925.png
 [Screenshot 3 - Group Chat in Action]
-c:\Users\aa\Pictures\Screenshots\Screenshot 2025-12-05 135740.png
 ```
 
 ### Demo Video
-<!-- Add your demo video here -->
-```
-[Insert Project Demo Video Link/Embed]
+
 ```
 
 ---
