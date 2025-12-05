@@ -15,17 +15,26 @@ const io = new Server(httpServer, {
   cors: "*",
 });
 
-const users = [];
+let users = [];
 
 io.on("connection", (socket) => {
   socket.on("onconnect", (msg) => {
     console.log(msg.name);
-
+    socket.username = msg.name;
     users.push(msg.name);
     console.log(users)
     io.emit("members", users);
 
     socket.broadcast.emit("onconnect", msg);
+  });
+
+   socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+      users = users.filter(value => value !== socket.username);
+      io.emit("members", users);
+    socket.broadcast.emit("userLeft", {
+      name : socket.username
+    });
   });
 
   socket.on("message", (msg) => {

@@ -9,6 +9,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [usermess, setusermess] = useState("");
   const [someconnect, setsomeconnect] = useState("");
+  const [somedisconnect, setsomedisconnect] = useState("");
   const [member, setmember] = useState([]);
 
   useEffect(() => {
@@ -39,6 +40,15 @@ function App() {
         setsomeconnect("");
       }, 3000);
     });
+
+    socket.on("userLeft", (data) => {
+      setsomedisconnect(data)
+     console.log("A user left:", data);
+     setTimeout(() => {
+        setsomedisconnect("");
+      }, 3000);
+   });
+
   }, []);
 
   const handleSubmit = (e) => {
@@ -108,7 +118,12 @@ function App() {
                   ))}
                 </select>
                 {someconnect ? (
-                  <span> {someconnect.name} is connecting</span>
+                  <span className="text-xl text-amber-200 flex flex-2 wrap-normal"> {someconnect.name} is connecting</span>
+                ) : (
+                  ``
+                )}
+                {somedisconnect ? (
+                  <span className="text-xl text-amber-200 flex flex-2 wrap-normal"> {somedisconnect.name} is disconnecting</span>
                 ) : (
                   ``
                 )}
