@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import Message from "./components/Message";
 import { socket } from "./socket";
-import { connect } from "socket.io-client";
+import { connect, io } from "socket.io-client";
 
 function App() {
   const [username, setusername] = useState("");
   const [submitted, setsubmitted] = useState();
   const [messages, setMessages] = useState([]);
   const [usermess, setusermess] = useState("");
+  const [someconnect, setsomeconnect] = useState("");
+  const [member, setmember] = useState([]);
 
   useEffect(() => {
-    socket.on("connect", (socket) => {
-      console.log(`connected id :${socket}`);
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+
+    socket.on("members", (list) => {
+      console.log(list);
+      setmember(list);
     });
 
     socket.on("message", (data) => {
@@ -24,13 +31,24 @@ function App() {
         },
       ]);
     });
+
+    socket.on("onconnect", (msg) => {
+      setsomeconnect(msg);
+
+      setTimeout(() => {
+        setsomeconnect("");
+      }, 3000);
+    });
   }, []);
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(username);
     setsubmitted(true);
+
+    socket.emit("onconnect", {
+      name: username,
+    });
   };
 
   const handleusermess = (e) => {
@@ -43,7 +61,7 @@ function App() {
         name: username,
       },
     ]);
-    
+
     socket.emit("message", {
       name: username,
       mess: usermess,
@@ -79,7 +97,22 @@ function App() {
         ) : (
           <div className="bg-black flex justify-center flex-col items-center text-white">
             <div className="flex p-2 gap-8 justify-center items-center">
-              <h1 className="text-blue-500">group chat...</h1>
+              <h1 className="text-blue-500">
+                group chat...
+                <select className="text-xl text-white p-4 border-0">
+                  {member.map((user, i) => (
+                    <option className="bg-black" key={i} value={user}>
+                      {user}
+                     { console.log(user)}
+                    </option>
+                  ))}
+                </select>
+                {someconnect ? (
+                  <span> {someconnect.name} is connecting</span>
+                ) : (
+                  ``
+                )}
+              </h1>
               <div className="flex text-xl p-2">
                 sgined in as
                 <div className="font-bold pl-2">{username}</div>
