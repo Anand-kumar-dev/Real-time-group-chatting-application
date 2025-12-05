@@ -20,11 +20,6 @@ A modern, real-time group chat application built with **React**, **Node.js**, an
 [Screenshot 2 - Chat Interface]
 [Screenshot 3 - Group Chat in Action]
 ```
-
-### Demo Video
-
-```
-
 ---
 
 ## Features
