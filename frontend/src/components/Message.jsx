@@ -1,21 +1,15 @@
-import React from 'react'
+export default function Message({ mess, sender, name }) {
+  const isMe = sender === "me";
 
-function Message({mess , sender , name}) {
   return (
-    <div className={`flex w-full ${sender === "me" ? "justify-end" : "justify-start"}`}>
-  <div className="p-3 rounded-2xl bg-blue-500 text-white flex flex-col max-w-xs">
-    
-    <span className="text-base text-xl text-black">{mess}</span>
-
-    <span className="text-s text-white  mt-1 self-end opacity-80">
-      {name}
-    </span>
-
-  </div>
-</div>
-
-
-  )
+    <div className={`flex w-full ${isMe ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[70%] px-4 py-3 rounded-2xl shadow-lg text-sm
+        ${isMe ? "bg-blue-600 text-white rounded-br-none" : "bg-zinc-800 text-gray-200 rounded-bl-none"}`}
+      >
+        <p>{mess}</p>
+        <span className="text-xs opacity-60 mt-1 block text-right">{name}</span>
+      </div>
+    </div>
+  );
 }
-
-export default Message
