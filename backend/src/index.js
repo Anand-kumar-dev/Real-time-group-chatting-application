@@ -28,6 +28,12 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("onconnect", msg);
   });
 
+  socket.on("typing",(msg)=>{
+    console.log(`${msg} is typing`)
+    socket.broadcast.emit("typing", msg)
+  }) 
+
+
    socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
       users = users.filter(value => value !== socket.username);
