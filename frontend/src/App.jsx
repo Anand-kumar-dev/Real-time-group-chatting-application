@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Message from "./components/Message";
 import { socket } from "./socket";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner"
 
 function App() {
   const [username, setusername] = useState("");
@@ -53,7 +55,8 @@ function App() {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+   toast.success(`welcome ${username}`);
     setsubmitted(true);
     socket.emit("onconnect", { name: username });
   };
@@ -128,9 +131,10 @@ function App() {
 
           {/* CONNECT / DISCONNECT NOTICES */}
           {someconnect && (
-            <div className="text-green-400 text-center mb-2">
-              {someconnect.name} joined
-            </div>
+            // <div className="text-green-400 text-center mb-2">
+            //   {someconnect.name} joined
+            // </div>
+            toast(`${someconnect.name} joined`)
           )}
           {somedisconnect && (
             <div className="text-red-400 text-center mb-2">
